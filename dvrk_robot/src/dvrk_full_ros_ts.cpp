@@ -353,13 +353,13 @@ int main(int argc, char ** argv)
         if (masterName.compare("MTMR") == 0)
         {
             // MTMR - PSM1 pair
-            dvrk::add_topics_mtm(rosBridge, "/dvrk_mtmr", "MTMR");
-            dvrk::add_topics_psm(rosBridge, "/dvrk_psm1", "PSM1");
+            dvrk::add_topics_mtm_timestamp(rosBridge, "/dvrk_mtmr", "MTMR");
+            dvrk::add_topics_psm_timestamp(rosBridge, "/dvrk_psm1", "PSM1");
         }
         else if (masterName.compare("MTML") == 0)
         {
-            dvrk::add_topics_mtm(rosBridge, "/dvrk_mtml", "MTML");
-            dvrk::add_topics_psm(rosBridge, "/dvrk_psm2", "PSM2");
+            dvrk::add_topics_mtm_timestamp(rosBridge, "/dvrk_mtml", "MTML");
+            dvrk::add_topics_psm_timestamp(rosBridge, "/dvrk_psm2", "PSM2");
         }
     }
     

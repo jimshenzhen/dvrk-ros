@@ -81,7 +81,7 @@ if (cisst_FOUND_AS_REQUIRED)
                include/dvrk_utilities/dvrk_add_topics_functions.h
                src/dvrk_add_topics_functions.cpp)
 
-  set (_EXECUTABLES dvrk_mtm_ros dvrk_psm_ros dvrk_ecm_ros dvrk_full_ros)
+  set (_EXECUTABLES dvrk_mtm_ros dvrk_psm_ros dvrk_ecm_ros dvrk_full_ros dvrk_full_ros_ts)
   foreach (_executable ${_EXECUTABLES})
     add_executable (${_executable} src/${_executable}.cpp)
     target_link_libraries (

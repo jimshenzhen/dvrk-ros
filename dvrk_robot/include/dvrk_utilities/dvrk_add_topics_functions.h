@@ -31,9 +31,14 @@ namespace dvrk {
 
     void add_topics_arm(mtsROSBridge & bridge,
                         const std::string & ros_namespace,
-                        const std::string & arm_component_name);
+                        const std::string & arm_component_name,
+                        bool bTimestamp = false);
 
     void add_topics_mtm(mtsROSBridge & bridge,
+                        const std::string & ros_namespace,
+                        const std::string & mtm_component_name);
+
+    void add_topics_mtm_timestamp(mtsROSBridge & bridge,
                         const std::string & ros_namespace,
                         const std::string & mtm_component_name);
 
@@ -41,7 +46,15 @@ namespace dvrk {
                         const std::string & ros_namespace,
                         const std::string & psm_component_name);
 
+    void add_topics_psm_timestamp(mtsROSBridge & bridge,
+                        const std::string & ros_namespace,
+                        const std::string & psm_component_name);
+
     void add_topics_ecm(mtsROSBridge & bridge,
+                        const std::string & ros_namespace,
+                        const std::string & ecm_component_name);
+
+    void add_topics_ecm_timestamp(mtsROSBridge & bridge,
                         const std::string & ros_namespace,
                         const std::string & ecm_component_name);
 }
