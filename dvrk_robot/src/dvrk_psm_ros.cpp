@@ -33,6 +33,14 @@ http://www.cisst.org/cisst/license.txt.
 
 int main(int argc, char** argv)
 {
+    // program deprecated
+    std::cout << "-----------------------------------------------------------" << std::endl
+              << "- This program is deprecated:                             -" << std::endl
+              << "-   use dvrk_console_json instead                         -" << std::endl
+              << "-   examples can be found in share/jhu-dVRK/console*.json -" << std::endl
+              << "-----------------------------------------------------------" << std::endl
+              << std::endl;
+
     // desired frequencies
     const double ioPeriod = 0.5 * cmn_ms;
     const double armPeriod = 2.0 * cmn_ms;
@@ -67,6 +75,7 @@ int main(int argc, char** argv)
                               cmnCommandLineOptions::REQUIRED_OPTION, &config_name);
     options.AddOptionOneValue("f", "firewire", "firewire port number(s)",
                               cmnCommandLineOptions::OPTIONAL_OPTION, &firewirePort);
+    options.AddOptionNoValue("I", "io-ros", "add ROS bridge for IO level");
 
     std::string errorMessage;
     if (!options.Parse(argc, argv, errorMessage)) {
@@ -130,12 +139,15 @@ int main(int argc, char** argv)
 
     // populate interfaces
     dvrk::add_topics_psm(robotBridge, "/dvrk/" + config_name, psm->GetName());
-
-    // add component
+    if (options.IsSet("io-ros")) {
+        dvrk::add_topics_io(robotBridge, "/dvrk/" + config_name + "/io", psm->GetName());
+    }
+    // add component and connect
     componentManager->AddComponent(&robotBridge);
-
-    // connect interfaces on cisst/SAW side
-    componentManager->Connect(robotBridge.GetName(), psm->GetName(), psm->GetName(), "Robot");
+    dvrk::connect_bridge_psm(robotBridge, psm->GetName());
+    if (options.IsSet("io-ros")) {
+        dvrk::connect_bridge_io(robotBridge, io->GetName(), psm->GetName());
+    }
 
     // organize all widgets in a tab widget
     QTabWidget * tabWidget = new QTabWidget;
@@ -143,8 +155,7 @@ int main(int argc, char** argv)
     mtsRobotIO1394QtWidgetFactory::WidgetListType::const_iterator iterator;
     for (iterator = robotWidgetFactory->Widgets().begin();
          iterator != robotWidgetFactory->Widgets().end();
-         ++iterator)
-        {
+         ++iterator) {
             tabWidget->addTab(*iterator, (*iterator)->GetName().c_str());
         }
     // pid gui

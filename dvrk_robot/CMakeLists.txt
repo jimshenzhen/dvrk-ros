@@ -57,9 +57,9 @@ if (cisst_FOUND_AS_REQUIRED)
                   DEPENDS ${REQUIRED_CISST_LIBRARIES})
 
   # sawRobotIO1394 has been compiled within cisst, we should find it automatically
-  cisst_find_saw_component (sawRobotIO1394 1.1.0 REQUIRED)
-  cisst_find_saw_component (sawIntuitiveResearchKit 1.1.0 REQUIRED)
-  cisst_find_saw_component (sawControllers 1.1.0 REQUIRED)
+  cisst_find_saw_component (sawRobotIO1394 1.2.0 REQUIRED)
+  cisst_find_saw_component (sawIntuitiveResearchKit 1.2.0 REQUIRED)
+  cisst_find_saw_component (sawControllers 1.2.0 REQUIRED)
   cisst_find_saw_component (sawConstraintController REQUIRED)
 
   include_directories (
@@ -79,9 +79,20 @@ if (cisst_FOUND_AS_REQUIRED)
 
   add_library (dvrk_utilities
                include/dvrk_utilities/dvrk_add_topics_functions.h
-               src/dvrk_add_topics_functions.cpp)
+               src/dvrk_add_topics_functions.cpp
+               include/dvrk_utilities/dvrk_console.h
+               src/dvrk_console.cpp)
+    target_link_libraries (
+      dvrk_utilities
+      ${sawRobotIO1394_LIBRARIES}
+      ${sawIntuitiveResearchKit_LIBRARIES}
+      ${sawControllers_LIBRARIES}
+      ${sawConstraintController_LIBRARIES}
+    )
+    cisst_target_link_libraries (dvrk_utilities ${REQUIRED_CISST_LIBRARIES})
 
-  set (_EXECUTABLES dvrk_mtm_ros dvrk_psm_ros dvrk_ecm_ros dvrk_full_ros dvrk_full_ros_ts)
+  set (_EXECUTABLES dvrk_mtm_ros dvrk_psm_ros dvrk_ecm_ros dvrk_full_ros dvrk_full_ros_ts dvrk_console_json)
+
   foreach (_executable ${_EXECUTABLES})
     add_executable (${_executable} src/${_executable}.cpp)
     target_link_libraries (

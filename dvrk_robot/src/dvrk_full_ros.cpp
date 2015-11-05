@@ -33,7 +33,6 @@ http://www.cisst.org/cisst/license.txt.
 #include <sawIntuitiveResearchKit/mtsIntuitiveResearchKitConsole.h>
 #include <sawIntuitiveResearchKit/mtsIntuitiveResearchKitConsoleQtWidget.h>
 #include <sawIntuitiveResearchKit/mtsIntuitiveResearchKitArmQtWidget.h>
-#include <sawIntuitiveResearchKit/mtsIntuitiveResearchKitUDPStreamer.h>
 #include <sawControllers/mtsTeleOperation.h>
 #include <sawControllers/mtsTeleOperationQtWidget.h>
 
@@ -71,11 +70,18 @@ void fileExists(const std::string & description, const std::string & filename)
 
 int main(int argc, char ** argv)
 {
+    // program deprecated
+    std::cout << "-----------------------------------------------------------" << std::endl
+              << "- This program is deprecated:                             -" << std::endl
+              << "-   use dvrk_console_json instead                         -" << std::endl
+              << "-   examples can be found in share/jhu-dVRK/console*.json -" << std::endl
+              << "-----------------------------------------------------------" << std::endl
+              << std::endl;
+
     // configuration
     const double periodIO = 0.5 * cmn_ms;
     const double periodKinematics = 2.0 * cmn_ms;
     const double periodTeleop = 2.0 * cmn_ms;
-    const double periodUDP = 20.0 * cmn_ms;
 
     // log configuration
     cmnLogger::SetMask(CMN_LOG_ALLOW_ALL);
@@ -353,18 +359,18 @@ int main(int argc, char ** argv)
         if (masterName.compare("MTMR") == 0)
         {
             // MTMR - PSM1 pair
-            dvrk::add_topics_mtm(rosBridge, "/dvrk_mtmr", "MTMR");
-            dvrk::add_topics_psm(rosBridge, "/dvrk_psm1", "PSM1");
+            dvrk::add_topics_mtm(rosBridge, "/dvrk/MTMR", "MTMR");
+            dvrk::add_topics_psm(rosBridge, "/dvrk/PSM1", "PSM1");
         }
         else if (masterName.compare("MTML") == 0)
         {
-            dvrk::add_topics_mtm(rosBridge, "/dvrk_mtml", "MTML");
-            dvrk::add_topics_psm(rosBridge, "/dvrk_psm2", "PSM2");
+            dvrk::add_topics_mtm(rosBridge, "/dvrk/MTML", "MTML");
+            dvrk::add_topics_psm(rosBridge, "/dvrk/PSM2", "PSM2");
         }
     }
     
     // populate interfaces
-    dvrk::add_topics_footpedal(rosBridge, "/dvrk_footpedal");
+    dvrk::add_topics_footpedals(rosBridge, "/dvrk_footpedal");
 
     componentManager->AddComponent(&rosBridge);
 
@@ -384,8 +390,8 @@ int main(int argc, char ** argv)
             componentManager->Connect(rosBridge.GetName(), "PSM2", "PSM2", "Robot");
         }
     }
-    componentManager->Connect(rosBridge.GetName(), "MTML", "MTML", "Robot");  
-    dvrk::connect_bridge_footpedal(rosBridge, "io");
+    dvrk::connect_bridge_footpedals(rosBridge, "io");
+
 
     ///////////////////////////////////////////////////////////////////
 
