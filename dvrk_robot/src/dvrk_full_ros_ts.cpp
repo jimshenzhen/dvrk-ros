@@ -100,6 +100,7 @@ int main(int argc, char ** argv)
     std::string jsonMainConfigFile;
     std::string jsonCollectionConfigFile;
     bool useCisstTeleop = true;
+    int periodROS = 10;
     typedef std::map<std::string, std::string> ConfigFilesType;
     ConfigFilesType configFiles;
     std::string masterName, slaveName;
@@ -122,6 +123,10 @@ int main(int argc, char ** argv)
     options.AddOptionOneValue("t", "teleop",
                               "1 to use cisst teleop, 0 not",
                               cmnCommandLineOptions::OPTIONAL_OPTION, &useCisstTeleop);
+
+    options.AddOptionOneValue("r", "ros",
+                              "period of ros update",
+                              cmnCommandLineOptions::OPTIONAL_OPTION, &periodROS);
 
     // check that all required options have been provided
     std::string configFilePath = ros::package::getPath("dvrk_robot");
@@ -345,7 +350,7 @@ int main(int argc, char ** argv)
     ///////////////////////  ROS Bridge   ////////////////////////////////////////////
 
     // Starting ROS-Bridge Here
-    mtsROSBridge rosBridge("RobotBridge", 20 * cmn_ms, true, false);
+    mtsROSBridge rosBridge("RobotBridge",  periodROS * cmn_ms, true, false);
     
     for (unsigned int i = 0; i < pairs.size(); ++i)
     {
