@@ -106,10 +106,17 @@ int main(int argc, char ** argv)
     const bool hasQt = !options.IsSet("text-only");
     const bool useTimestamp = options.IsSet("time-stamp");
 
+    // pseudo code
+    #if 0
+    mtsMyPSM * psm1 = new mtsMyPSM("PSM1");   // name must match name in console.json file.   In json, type would be PSM_DERIVED
+    componentManager->AddComponent(psm1_lin);
+    #endif
+
     // console
     mtsIntuitiveResearchKitConsole * console = new mtsIntuitiveResearchKitConsole("console");
     fileExists("console JSON configuration file", jsonMainConfigFile);
     console->Configure(jsonMainConfigFile);
+
     componentManager->AddComponent(console);
     console->Connect();
 

@@ -218,6 +218,17 @@ void dvrk::add_topics_psm(mtsROSBridge & bridge,
     // events
     bridge.AddPublisherFromEventWrite<prmEventButton, std_msgs::Bool>
         (psm_component_name, "ManipClutch", ros_namespace + "/manip_clutch");
+
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::Pose>
+        (psm_component_name, "GetPositionCartesianJ1", ros_namespace +"/position_cartesian_current_J1");
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::Pose>
+        (psm_component_name, "GetPositionCartesianJ2", ros_namespace +"/position_cartesian_current_J2");
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::Pose>
+        (psm_component_name, "GetPositionCartesianJ3", ros_namespace +"/position_cartesian_current_J3");
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::Pose>
+        (psm_component_name, "GetPositionCartesianJ4", ros_namespace +"/position_cartesian_current_J4");
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::Pose>
+        (psm_component_name, "GetPositionCartesianJ5", ros_namespace +"/position_cartesian_current_J5");
 }
 
 void dvrk::add_topics_psm_timestamp(mtsROSBridge & bridge,
@@ -234,6 +245,18 @@ void dvrk::add_topics_psm_timestamp(mtsROSBridge & bridge,
     // events
     bridge.AddPublisherFromEventWrite<prmEventButton, std_msgs::Bool>
         (psm_component_name, "ManipClutch", ros_namespace + "/manip_clutch");
+
+
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::PoseStamped>
+        (psm_component_name, "GetPositionCartesianJ1", ros_namespace +"/position_cartesian_current_J1");
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::PoseStamped>
+        (psm_component_name, "GetPositionCartesianJ2", ros_namespace +"/position_cartesian_current_J2");
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::PoseStamped>
+        (psm_component_name, "GetPositionCartesianJ3", ros_namespace +"/position_cartesian_current_J3");
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::PoseStamped>
+        (psm_component_name, "GetPositionCartesianJ4", ros_namespace +"/position_cartesian_current_J4");
+    bridge.AddPublisherFromCommandRead<prmPositionCartesianGet, geometry_msgs::PoseStamped>
+        (psm_component_name, "GetPositionCartesianJ5", ros_namespace +"/position_cartesian_current_J5");
 }
 
 
