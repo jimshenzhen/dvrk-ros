@@ -114,10 +114,42 @@ int main(int argc, char ** argv)
     const bool useTimestamp = options.IsSet("time-stamp");
 
     // Add custom PSM
-    #if 0
-    mtsIntuitiveResearchKitDerivedPSM * psm1_lin = new mtsIntuitiveResearchKitDerivedPSM("PSM1");   // name must match name in console.json file.   In json, type would be PSM_DERIVED
-    mtsIntuitiveResearchKitDerivedPSM * psm2_lin = new mtsIntuitiveResearchKitDerivedPSM("PSM2");
-    componentManager->AddComponent(psm1_lin);
+    #if 1
+    std::ifstream jsonStream;
+    jsonStream.open(jsonMainConfigFile.c_str());
+
+    Json::Value jsonConfig;
+    Json::Reader jsonReader;
+    if (!jsonReader.parse(jsonStream, jsonConfig)) {
+        std::cerr << "Error: " << "Configure: failed to parse configuration\n"
+                                 << jsonReader.getFormattedErrorMessages() << std::endl;;
+    }
+
+    double periodIO = 0.5 * cmn_ms;
+
+    const Json::Value arms = jsonConfig["arms"];
+    for (unsigned int index = 0; index < arms.size(); ++index) {
+        Json::Value jsonValue;
+        jsonValue = arms[index]["name"];
+        std::string nameString = jsonValue.asString();
+        if (nameString == "PSM1") {
+            jsonValue = arms[index]["type"];
+            std::string typeString = jsonValue.asString();
+            if (typeString == "PSM_DERIVED") {
+                mtsIntuitiveResearchKitDerivedPSM * psm1_lin = new mtsIntuitiveResearchKitDerivedPSM("PSM1", periodIO);   // name must match name in console.json file.   In json, type would be PSM_DERIVED
+                componentManager->AddComponent(psm1_lin);
+            }
+        }
+        else if (nameString == "PSM2") {
+            jsonValue = arms[index]["type"];
+            std::string typeString = jsonValue.asString();
+            if (typeString == "PSM_DERIVED") {
+                mtsIntuitiveResearchKitDerivedPSM * psm2_lin = new mtsIntuitiveResearchKitDerivedPSM("PSM2", periodIO);
+                componentManager->AddComponent(psm2_lin);
+            }
+        }
+    }
+    
     #endif
 
     // console
