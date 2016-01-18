@@ -113,9 +113,10 @@ int main(int argc, char ** argv)
     const bool hasQt = !options.IsSet("text-only");
     const bool useTimestamp = options.IsSet("time-stamp");
 
-    // pseudo code
+    // Add custom PSM
     #if 0
-    mtsMyPSM * psm1 = new mtsMyPSM("PSM1");   // name must match name in console.json file.   In json, type would be PSM_DERIVED
+    mtsIntuitiveResearchKitDerivedPSM * psm1_lin = new mtsIntuitiveResearchKitDerivedPSM("PSM1");   // name must match name in console.json file.   In json, type would be PSM_DERIVED
+    mtsIntuitiveResearchKitDerivedPSM * psm2_lin = new mtsIntuitiveResearchKitDerivedPSM("PSM2");
     componentManager->AddComponent(psm1_lin);
     #endif
 
