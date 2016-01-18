@@ -115,17 +115,28 @@ void dvrk::add_topics_arm(mtsROSBridge & bridge,
     if (bTimestamp)
     {
         bridge.AddSubscriberToCommandWrite<prmPositionCartesianSet, geometry_msgs::PoseStamped>
-            (arm_component_name, "SetPositionCartesian", ros_namespace + "/set_position_cartesian");
+            (arm_component_name, "SetPositionCartesian",
+             ros_namespace + "/set_position_cartesian");
         bridge.AddSubscriberToCommandWrite<prmPositionCartesianSet, geometry_msgs::PoseStamped>
-            (arm_component_name, "SetPositionGoalCartesian", ros_namespace + "/set_position_goal_cartesian");
+            (arm_component_name, "SetPositionGoalCartesian",
+             ros_namespace + "/set_position_goal_cartesian");
     }
     else
     {
         bridge.AddSubscriberToCommandWrite<prmPositionCartesianSet, geometry_msgs::Pose>
-            (arm_component_name, "SetPositionCartesian", ros_namespace + "/set_position_cartesian");
+            (arm_component_name, "SetPositionCartesian",
+             ros_namespace + "/set_position_cartesian");
         bridge.AddSubscriberToCommandWrite<prmPositionCartesianSet, geometry_msgs::Pose>
-            (arm_component_name, "SetPositionGoalCartesian", ros_namespace + "/set_position_goal_cartesian");
+            (arm_component_name, "SetPositionGoalCartesian",
+             ros_namespace + "/set_position_goal_cartesian");
     }
+    
+    bridge.AddSubscriberToWriteCommand<prmForceCartesianSet, geometry_msgs::Wrench>
+        (arm_component_name, "SetWrenchBody",
+         ros_namespace + "/set_wrench_body");
+    bridge.AddSubscriberToWriteCommand<prmForceCartesianSet, geometry_msgs::Wrench>
+        (arm_component_name, "SetWrenchSpatial",
+         ros_namespace + "/set_wrench_spatial");
 
     // events
     bridge.AddPublisherFromEventWrite<std::string, std_msgs::String>
@@ -429,7 +440,9 @@ void dvrk::add_topics_io(mtsROSBridge & bridge,
     bridge.AddPublisherFromCommandRead<vctDoubleVec, sensor_msgs::JointState>
         (arm_name + "-io", "GetPosition",
          ros_namespace + "/joint_position");
-
+    bridge.AddPublisherFromCommandRead<prmPositionJointGet, sensor_msgs::JointState>
+        (arm_name + "-io", "GetPositionActuator",
+         ros_namespace + "/actuator_position");
 }
 
 void dvrk::connect_bridge_io(mtsROSBridge & bridge,
