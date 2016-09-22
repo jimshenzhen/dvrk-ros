@@ -6,7 +6,7 @@
   Author(s):  Zihan Chen, Anton Deguet
   Created on: 2013-02-07
 
-  (C) Copyright 2013-2015 Johns Hopkins University (JHU), All Rights Reserved.
+  (C) Copyright 2013-2016 Johns Hopkins University (JHU), All Rights Reserved.
 
 --- begin cisst license - do not edit ---
 
@@ -352,44 +352,22 @@ int main(int argc, char ** argv)
 
     // Starting ROS-Bridge Here
     mtsROSBridge rosBridge("RobotBridge", 20 * cmn_ms, true, false);
-    
-    for (unsigned int i = 0; i < pairs.size(); ++i)
-    {
-        std::string masterName = pairs[i]["master"]["name"].asString();
-        if (masterName.compare("MTMR") == 0)
-        {
-            // MTMR - PSM1 pair
-            dvrk::add_topics_mtm(rosBridge, "/dvrk/MTMR", "MTMR");
-            dvrk::add_topics_psm(rosBridge, "/dvrk/PSM1", "PSM1");
-        }
-        else if (masterName.compare("MTML") == 0)
-        {
-            dvrk::add_topics_mtm(rosBridge, "/dvrk/MTML", "MTML");
-            dvrk::add_topics_psm(rosBridge, "/dvrk/PSM2", "PSM2");
-        }
-    }
-    
+
     // populate interfaces
-    dvrk::add_topics_footpedals(rosBridge, "/dvrk_footpedal");
+    const dvrk_topics_version::version version = dvrk_topics_version::v1_3_0;
+    dvrk::add_topics_mtm(rosBridge, "/dvrk/MTMR", "MTMR", version);
+    dvrk::add_topics_mtm(rosBridge, "/dvrk/MTML", "MTML", version);
+    dvrk::add_topics_psm(rosBridge, "/dvrk/PSM1", "PSM1", version);
+    dvrk::add_topics_psm(rosBridge, "/dvrk/PSM2", "PSM2", version);
+    dvrk::add_topics_footpedals(rosBridge, "/dvrk/footpedals", version);
 
     componentManager->AddComponent(&rosBridge);
 
     // connect all ros bridge interfaces
-    for (unsigned int i = 0; i < pairs.size(); ++i)
-    {
-        std::string masterName = pairs[i]["master"]["name"].asString();
-        if (masterName.compare("MTMR") == 0)
-        {
-            // MTMR - PSM1 pair
-            componentManager->Connect(rosBridge.GetName(), "MTMR", "MTMR", "Robot");
-            componentManager->Connect(rosBridge.GetName(), "PSM1", "PSM1", "Robot");
-        }
-        else if (masterName.compare("MTML") == 0)
-        {
-            componentManager->Connect(rosBridge.GetName(), "MTML", "MTML", "Robot");
-            componentManager->Connect(rosBridge.GetName(), "PSM2", "PSM2", "Robot");
-        }
-    }
+    componentManager->Connect(rosBridge.GetName(), "MTML", "MTML", "Robot");
+    componentManager->Connect(rosBridge.GetName(), "MTMR", "MTMR", "Robot");
+    componentManager->Connect(rosBridge.GetName(), "PSM1", "PSM1", "Robot");
+    componentManager->Connect(rosBridge.GetName(), "PSM2", "PSM2", "Robot");
     dvrk::connect_bridge_footpedals(rosBridge, "io");
 
 
@@ -422,4 +400,3 @@ int main(int argc, char ** argv)
 
     return 0;
 }
-
